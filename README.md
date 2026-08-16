@@ -24,15 +24,28 @@ Instead of relying on standard cloud storage, LanVault acts as a self-hosted sec
 ## 📂 Project Structure
 
 ```text
-├── config/              # Database and Multer storage configurations
-├── controllers/         # Core business logic and file handling
-├── public/              # Frontend UI and Context-Aware JavaScript
-├── routes/              # Express API endpoints
-├── sql_commands/        # SQL initialization and update scripts
-├── uploads/             # Dynamic, isolated storage (ignored in git)
-├── docker-compose.yml   # Container orchestration
-├── server.js            # Node.js entry point
-└── .env                 # Environment variables
+├── config/
+│   ├── db.js                # MySQL database connection and pool setup
+│   └── multerConfig.js      # File upload handling and context-aware physical routing
+├── controllers/
+│   └── fileController.js    # Core logic for processing uploads, database queries, and ZIP generation
+├── public/
+│   ├── index.html           # Frontend UI layout and structural elements
+│   └── main.js              # Client-side JavaScript (Context-Aware DOM manipulation & Socket.io)
+├── routes/
+│   └── fileRoutes.js        # Express API endpoints mapping to controllers
+├── sql_commands/
+│   ├── init.sql             # Initial database table creation script
+│   └── update1.sql...       # Schema migration and update scripts
+├── uploads/                 # Dynamic, isolated storage for online/offline files (ignored in git)
+├── .dockerignore            # Specifies files to exclude from the Docker build context
+├── .env.example             # Template for secure environment variables
+├── .gitignore               # Specifies files intentionally untracked by Git (e.g., node_modules)
+├── docker-compose.yml       # Orchestrates the Node server and MySQL container integration
+├── Dockerfile               # Instructions to build the containerized Node.js image
+├── package.json             # Project metadata, scripts, and npm dependencies
+├── README.md                # Project documentation and setup guide
+└── server.js                # Node.js entry point, Socket.io initialization, and Express server
 ```
 
 ## 🚀 How to Run Locally
