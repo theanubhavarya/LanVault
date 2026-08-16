@@ -1,2 +1,20 @@
+# Node Dependencies
 node_modules/
+
+# Environment Variables & sensitive information
 .env
+
+# User Data & Storage
+uploads/
+*.zip
+
+# Binaries and Executables
+ngrok.exe
+*.exe
+
+# Database data
+db_data/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db

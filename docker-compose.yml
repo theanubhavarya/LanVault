@@ -1,0 +1,42 @@
+# orchestrator that links my Node app and my MySQL database together
+
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: lanvault_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword # Change in production
+      MYSQL_DATABASE: lanvault
+      MYSQL_USER: lanvault_user
+      MYSQL_PASSWORD: lanvault_password
+    ports:
+      - "3308:3306" # as 3306 and 3307 are occupied by my other applications, I have to use 3308 for this one
+    volumes:
+      - db_data:/var/lib/mysql
+      # This runs your init.sql file automatically on startup!
+      - ./sql_commands/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    container_name: lanvault_app
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      # Notice DB_HOST is now "db" (the name of the service above), not localhost!
+      DB_HOST: db
+      DB_USER: lanvault_user
+      DB_PASSWORD: lanvault_password
+      DB_NAME: lanvault
+      PORT: 8000
+    volumes:
+      # This links the container's uploads folder to your physical D:\ drive
+      - ./uploads:/usr/src/app/uploads
+    depends_on:
+      - db
+
+volumes:
+  db_data:

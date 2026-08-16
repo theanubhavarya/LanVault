@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LanVault File Share</title>
+  </head>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    "
+  >
+    <h1>LanVault Portal</h1>
+
+    <div
+      style="
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      "
+    >
+      <button
+        id="btn-upload"
+        style="
+          padding: 10px 20px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          cursor: pointer;
+          font-weight: bold;
+        "
+      >
+        📤 Upload Files
+      </button>
+      <button
+        id="btn-download"
+        style="
+          padding: 10px 20px;
+          background-color: #f1f1f1;
+          color: black;
+          border: none;
+          cursor: pointer;
+          font-weight: bold;
+          margin-left: 10px;
+        "
+      >
+        📥 Browse & Download
+      </button>
+    </div>
+
+    <!-- 📤 UPLOAD SECTION -->
+    <div id="uploadSection">
+      <p>Share files directly and securely without internet via LanVault.</p>
+
+      <!-- 🧠 CONTEXT-AWARE STATUS BADGE -->
+      <div
+        style="
+          text-align: center;
+          margin-bottom: 20px;
+          padding: 10px;
+          background: #e9ecef;
+          border-radius: 5px;
+        "
+      >
+        <strong id="network-status-badge">Detecting Network Context...</strong>
+      </div>
+
+      <!-- 🆕 ADDED: id="uploadForm" and default mode=offline -->
+      <form
+        id="uploadForm"
+        action="/api/upload?mode=offline"
+        method="POST"
+        enctype="multipart/form-data"
+        style="background: #f9f9f9; padding: 20px; border-radius: 8px"
+      >
+        <label for="scholar_number"
+          ><strong>Scholar Number (Required):</strong></label
+        ><br />
+        <input
+          type="text"
+          id="scholar_number"
+          name="scholar_number"
+          required
+          placeholder="e.g., 23BCS101 or 22DS200"
+          style="width: 100%; padding: 8px; margin: 5px 0 15px 0"
+        />
+
+        <!-- 🆕 NEW: Secure PIN Input -->
+        <label for="userPin"
+          ><strong>Secure PIN (4 Digits Required):</strong></label
+        ><br />
+        <input
+          type="password"
+          id="userPin"
+          name="userPin"
+          required
+          maxlength="4"
+          pattern="[0-9]{4}"
+          placeholder="e.g., 1234"
+          title="Please enter exactly 4 digits. If this is your first time, this will become your permanent PIN."
+          style="width: 100%; padding: 8px; margin: 5px 0 15px 0"
+        />
+
+        <label for="username"><strong>Your Name (Optional):</strong></label
+        ><br />
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="e.g., Anubhav"
+          style="width: 100%; padding: 8px; margin: 5px 0 15px 0"
+        />
+
+        <label for="college"><strong>College (Optional):</strong></label
+        ><br />
+        <input
+          type="text"
+          id="college"
+          name="college"
+          placeholder="e.g., IIIT Bhopal"
+          style="width: 100%; padding: 8px; margin: 5px 0 15px 0"
+        />
+
+        <label for="branch"><strong>Branch (Optional):</strong></label
+        ><br />
+        <input
+          type="text"
+          id="branch"
+          name="branch"
+          placeholder="e.g., CSE"
+          style="width: 100%; padding: 8px; margin: 5px 0 15px 0"
+        />
+
+        <label for="labFile"><strong>Select File (Required):</strong></label
+        ><br />
+        <input
+          type="file"
+          id="labFile"
+          name="labFile"
+          required
+          style="margin: 5px 0 20px 0"
+        />
+        <br />
+        <button
+          type="submit"
+          style="
+            padding: 12px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+          "
+        >
+          Secure Upload
+        </button>
+      </form>
+    </div>
+
+    <!-- 📥 DOWNLOAD SECTION (Hidden by default) -->
+    <div id="downloadSection" style="display: none">
+      <div
+        style="
+          background: #e9ecef;
+          padding: 15px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+          display: flex;
+          gap: 10px;
+        "
+      >
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search names, branches (e.g., CSE, Data Science), or files..."
+          style="
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          "
+        />
+
+        <select
+          id="sortSelect"
+          style="padding: 8px; border: 1px solid #ccc; border-radius: 4px"
+        >
+          <option value="newest">🕒 Newest First</option>
+          <option value="oldest">⏳ Oldest First</option>
+          <option value="az">🔤 A - Z</option>
+          <option value="za">🔠 Z - A</option>
+        </select>
+      </div>
+
+      <ul id="fileList" style="padding: 0; margin: 0"></ul>
+    </div>
+
+    <!-- 🆕 NEW: Socket.io Client Library -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/main.js"></script>
+  </body>
+</html>
